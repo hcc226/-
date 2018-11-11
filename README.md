@@ -50,30 +50,30 @@ function sample(){
 #### 事件处理程序
 
 - DOM0级事件处理程序,被认为是元素的方法
-(```)
+```
 var btn = document.getElementById(“mybt”); 
 btn.onclick = function(){
 alert(this.id) //this为btn
 }
-(```)
+```
 （只会在事件冒泡中运行）
 
 - DOM2级事件处理程序addEventListener() removeEventListener()
-(```)
+```
 var btn = document.getElementById(“mybt”);
 btn.addEventListener(“click”,function(){
   alert(this.id)
 },false);
-(```)
+```
 false是冒泡 true是捕获 所有的事件都可以冒泡么    答：不是，blur focus change不可冒泡
 
 - IE事件处理程序 attachEvent(),detachEvent()
-(```)
+```
 var btn = document.getElementById(“mybt”);
 btn. attachEvent (“onclick”,function(){
   alert(this)//window
 });
-(```)
+```
 只支持冒泡
 
 #### dom2事件模型与IE事件模型的区别
