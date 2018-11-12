@@ -87,6 +87,10 @@ btn. attachEvent (“onclick”,function(){
 事件委托还有一个好处就是添加进来的元素也能绑定事件
 
 ### 跨域的方法
+
+同源策略（Same origin policy）是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，则浏览器的正常功能可能都会受到影响。可以说Web是构建在同源策略基础之上的，浏览器只是针对同源策略的一种实现。
+何谓同源：如果两个URL的域名、协议、端口相同，则表示他们同源。
+
 #### jsonp 
 使用script标签不受跨域限制，但只适合get请求
 ```
@@ -212,6 +216,43 @@ huhu.com 对应的文件夹下边1.html 里边代码为：
 </body>
 </html>
 ```
+### 原型、原型链
+原型是构造函数具有的属性，原型链是变量具有的属性，通过构造函数new出来的实例对象的原型链（__proto__）指向构造函数的原型(prototype)
+
+console.log(Sup.prototype.__proto__ === Object.prototype)//true
+console.log(Sup.prototype.__proto__.__proto__)//null
+但是原型指向构造函数倒是有的，这就要讲到第三个属性：constructor，每个原型都有一个 constructor 属性指向关联的构造函数。为了验证这一点，我们可以尝试：
+function Person() {
+}
+console.log(Person === Person.prototype.constructor)
+
+constructor
+首先是 constructor 属性，我们看个例子：
+function Person() {
+}
+var person = new Person();
+console.log(person.constructor === Person); // true
+当获取 person.constructor 时，其实 person 中并没有 constructor 属性,当不能读取到constructor 属性时，会从 person 的原型也就是 Person.prototype 中读取，正好原型中有该属性，所以：
+person.constructor === Person.prototype.constructor
+函数的继承 B.prototype = new A();
+
+function Sup() {
+
+    }
+    console.log(Sup.prototype.__proto__===Object.prototype) // true  原型对象就是通过 Object 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数(Object)的 prototype
+    console.log(Sup.prototype.__proto__.__proto__)//null
+    function Sub() {
+
+    }
+    Sub.prototype = new Sup()
+    let s = new Sub()
+console.log(s.constructor === Sub.prototype.constructor)//true
+    console.log(s.constructor === Sup.prototype.constructor)//true
+    console.log(s.__proto__===Sub.prototype) // true
+    console.log(s.__proto__.__proto__ === Sup.prototype) // true
+    console.log(s.__proto__.__proto__.__proto__===Object.prototype)//true
+    console.log(Sub.prototype)// Sup{}
+    console.log(Sub.prototype.prototype)//undefined
 
 ### 判断一个网页是从微信打开还是支付宝打开
 userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符串
