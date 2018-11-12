@@ -218,14 +218,13 @@ huhu.com 对应的文件夹下边1.html 里边代码为：
 ```
 ### 原型、原型链
 原型是构造函数具有的属性，原型链是变量具有的属性，通过构造函数new出来的实例对象的原型链（__proto__）指向构造函数的原型(prototype)
-
+![proto](/img/proto.png "prototype")
 console.log(Sup.prototype.__proto__ === Object.prototype)//true
 console.log(Sup.prototype.__proto__.__proto__)//null
-但是原型指向构造函数倒是有的，这就要讲到第三个属性：constructor，每个原型都有一个 constructor 属性指向关联的构造函数。为了验证这一点，我们可以尝试：
+constructor，每个原型都有一个 constructor 属性指向关联的构造函数。为了验证这一点，我们可以尝试：
 function Person() {
 }
 console.log(Person === Person.prototype.constructor)
-
 constructor
 首先是 constructor 属性，我们看个例子：
 function Person() {
@@ -235,25 +234,21 @@ console.log(person.constructor === Person); // true
 当获取 person.constructor 时，其实 person 中并没有 constructor 属性,当不能读取到constructor 属性时，会从 person 的原型也就是 Person.prototype 中读取，正好原型中有该属性，所以：
 person.constructor === Person.prototype.constructor
 函数的继承 B.prototype = new A();
-
-function Sup() {
-
-    }
-    console.log(Sup.prototype.__proto__===Object.prototype) // true  原型对象就是通过 Object 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数(Object)的 prototype
-    console.log(Sup.prototype.__proto__.__proto__)//null
-    function Sub() {
-
-    }
-    Sub.prototype = new Sup()
-    let s = new Sub()
+```
+function Sup() {}
+console.log(Sup.prototype.__proto__===Object.prototype) // true  原型对象就是通过 Object 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数(Object)的 prototype
+console.log(Sup.prototype.__proto__.__proto__)//null
+function Sub() {}
+Sub.prototype = new Sup()
+let s = new Sub()
 console.log(s.constructor === Sub.prototype.constructor)//true
-    console.log(s.constructor === Sup.prototype.constructor)//true
-    console.log(s.__proto__===Sub.prototype) // true
-    console.log(s.__proto__.__proto__ === Sup.prototype) // true
-    console.log(s.__proto__.__proto__.__proto__===Object.prototype)//true
-    console.log(Sub.prototype)// Sup{}
-    console.log(Sub.prototype.prototype)//undefined
-
+console.log(s.constructor === Sup.prototype.constructor)//true
+console.log(s.__proto__===Sub.prototype) // true
+console.log(s.__proto__.__proto__ === Sup.prototype) // true
+console.log(s.__proto__.__proto__.__proto__===Object.prototype)//true
+console.log(Sub.prototype)// Sup{}
+console.log(Sub.prototype.prototype)//undefined
+```
 ### 判断一个网页是从微信打开还是支付宝打开
 userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符串
 
@@ -295,7 +290,7 @@ server拿到数字证书之后，就把它传送给浏览器；
 #### 缺点
 - 速度慢 cpu消耗很大
 - 加密内容长度有限制
-#### 证书是如何工作的？？
+#### 证书是如何工作的
 - 证书是否是信任的有效证书。所谓信任：浏览器内置了信任的根证书，就是看看web服务器的证书是不是这些信任根发的或者信任根的二级证书机构颁发的。所谓有效，就是看看web服务器证书是否在有效期，是否被吊销了。
 - 对方是不是上述证书的合法持有者。简单来说证明对方是否持有证书的对应私钥。验证方法两种，一种是对方签个名，我用证书验证签名；另外一种是用证书做个信封，看对方是否能解开。
 - 以上的所有验证，除了验证证书是否吊销需要和CA关联，其他都可以自己完成。验证正式是否吊销可以采用黑名单方式或者OCSP方式。黑名单就是定期从CA下载一个名单列表，里面有吊销的证书序列号，自己在本地比对一下就行。优点是效率高。缺点是不实时。OCSP是实时连接CA去验证，优点是实时，缺点是效率不高。
