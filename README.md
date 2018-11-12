@@ -219,21 +219,23 @@ huhu.com 对应的文件夹下边1.html 里边代码为：
 ### 原型、原型链
 原型是构造函数具有的属性，原型链是变量具有的属性，通过构造函数new出来的实例对象的原型链（__proto__）指向构造函数的原型(prototype)
 ![proto](/img/proto.png "prototype")
+```
 console.log(Sup.prototype.__proto__ === Object.prototype)//true
 console.log(Sup.prototype.__proto__.__proto__)//null
-constructor，每个原型都有一个 constructor 属性指向关联的构造函数。为了验证这一点，我们可以尝试：
+//constructor，每个原型都有一个 constructor 属性指向关联的构造函数。为了验证这一点，我们可以尝试：
 function Person() {
 }
 console.log(Person === Person.prototype.constructor)
 constructor
-首先是 constructor 属性，我们看个例子：
+//首先是 constructor 属性，我们看个例子：
 function Person() {
 }
 var person = new Person();
 console.log(person.constructor === Person); // true
-当获取 person.constructor 时，其实 person 中并没有 constructor 属性,当不能读取到constructor 属性时，会从 person 的原型也就是 Person.prototype 中读取，正好原型中有该属性，所以：
+//当获取 person.constructor 时，其实 person 中并没有 constructor 属性,当不能读取到constructor 属性时，会从 person 的原型也就是 //Person.prototype 中读取，正好原型中有该属性，所以：
 person.constructor === Person.prototype.constructor
-函数的继承 B.prototype = new A();
+//函数的继承 B.prototype = new A();
+```
 ```
 function Sup() {}
 console.log(Sup.prototype.__proto__===Object.prototype) // true  原型对象就是通过 Object 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数(Object)的 prototype
