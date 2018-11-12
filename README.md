@@ -86,6 +86,133 @@ btn. attachEvent (“onclick”,function(){
 对“事件处理程序过多”问题的解决方案就是事件委托。事件委托利用了事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件。例如，click事件会一直冒泡到document层次。也就是说，我们可以为整个页面指定一个onclick事件处理程序，而不必给每个可单击的元素分别添加事件处理程序。
 事件委托还有一个好处就是添加进来的元素也能绑定事件
 
+### 跨域的方法
+#### jsonp 
+使用script标签不受跨域限制，但只适合get请求
+```
+     <script type="text/javascript">
+    // 得到航班信息查询结果后的回调函数
+    var flightHandler = function(data){
+        alert('你查询的航班结果是：票价 ' + data.price + ' 元，' + '余票 ' + data.tickets + ' 张。');
+    };
+    // 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）
+    var url = "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&callback=flightHandler";
+    // 创建script标签，设置其属性
+    var script = document.createElement('script');
+    script.setAttribute('src', url);
+    // 把script标签加入head，此时调用开始
+    document.getElementsByTagName('head')[0].appendChild(script); 
+    </script>
+```
+#### CORS（cross-origin resource sharing）
+
+跨源资源共享 使用自定义的HTTP头部让浏览器与服务器沟通，从而决定请求是否成功。
+附加一个origin头部，Origin：http://www.nczonline.ne
+服务器认为可以接受，就在Access-Control-Allow-Origin头部中回发相同的源信息
+Access-Control-Allow-Origin：http://www.nczonline.ne
+以上两种造成了不安全，即不安全随便就可以访问
+解决方案：生成一个tokon
+
+#### postMessage h5的方法
+在jsonp1域名下面获取jsonp2中localStorage的test字段的值，尝试着用postMessage来实现，具体的实现方式如下：
+jsonp1.com下面的index.htm如下：
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="test"></div>
+    <textarea id="textarea"></textarea>
+    <iframe style="width:0px;height:0px" id="f" src="http://www.jsonp2.com/demo.html"></iframe>
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+    <script>
+        var test1='';
+        onmessage=function(e){
+          e=e||event;
+          // console.log(e);
+          // console.log(e.data);
+          test1=e.data;
+          if(test1=="123"){
+              alert("success!");
+          }else{
+              alert("error");
+          }
+         $("#test").html("<span style='color:red'>"+test1+"</span>");
+        };
+    </script>
+</body>
+</html>
+```
+jsonp2.com中的demo.html内容：
+```
+<iframe id="f" src="http://www.jsonp1.com/index.html"></iframe>
+<script>
+var f=document.getElementById("f");
+f.onload=function(){
+    window.localStorage.setItem("test","123");
+    var value=window.localStorage.getItem("test");
+    window.localStorage.clear();
+  f.contentWindow.postMessage(value,"http://www.jsonp1.com");
+}
+</script>
+```
+#### document.domain 
+document.domain的作用是用来获取/设置当前文档的原始域部分 a.gihub.oi,b.github.io若两个源所用协议、端口一致，主域相同而二级域名不同的话，可以借鉴该方法解决跨域请求。
+// 在 a.huhu.com 所指的文件下边建立 test.html 代码如下：
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>html</title>
+    <script type="text/javascript" src = "jquery-1.12.1.js"></script>
+</head>
+<body>
+    <div>A页面</div>
+    <iframe style = "display : none" name = "iframe1" id = "iframe" src="http://huhu.com/1.html" frameborder="0"></iframe>
+    <script type="text/javascript">
+        $(function(){
+            try{
+                document.domain = "huhu.com"
+            }catch(e){}
+            $("#iframe").load(function(){
+                var jq = document.getElementById('iframe').contentWindow.$
+                jq.get("http://huhu.com/test.json",function(data){
+                    console.log(data);
+                });
+            })
+        })
+    </script>
+</body>
+</html>
+````
+备注：利用 iframe 加载 其他域下的文件（huhu.com/1.html）, 同时 document.domain 设置成 huhu.com ，当 iframe 加载完毕后就可以获取 huhu.com 域下的全局对象，此时尝试着去请求 huhu.com 域名下的 test.json （此时可以请求接口），就会发现数据请求失败了~~ 纳尼！！！！！！！
+数据请求失败，目的没有达到，自然是还少一步：
+huhu.com 对应的文件夹下边1.html 里边代码为：
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>html</title>
+    <script type="text/javascript" src = "jquery-1.12.1.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            try{
+                document.domain = "huhu.com"
+            }catch(e){}
+        })
+    </script>
+</head>
+<body>
+    <div id = "div1">B页面</div>
+</body>
+</html>
+```
+
 ### 判断一个网页是从微信打开还是支付宝打开
 userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符串
 
