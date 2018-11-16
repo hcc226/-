@@ -374,7 +374,7 @@ let sub = new Sub();
 
 
 DOM 结构 由一个父容器div#lazy-img，里面是图片标签，父容器是可以滚动的，图片有固定高度。大家可以看到，容器内的img元素没有 src 属性，而有一个 data-src 属性。 这是不想让图片提前加载，所以把图片的链接储存到data-src 内。然后监听scroll事件 替换src
-具体代码详见
+具体代码详见 https://github.com/hcc226/FE-Interview/blob/master/codes/lazyLoad.js
 
 
 ### es6常问知识点
