@@ -384,7 +384,7 @@ DOM 结构 由一个父容器div#lazy-img，里面是图片标签，父容器是
 - 同时由客户主动询问，转换为服务器（推送）有信息的时候就发送（当然客户端还是等主动发送信息过来的。。），没有信息的时候就交给接线员（Nginx），不需要占用本身速度就慢的客服（Handler）了 
 #### 主要应用场景
 1.社交订阅2.多玩家游戏3.协同编辑/编程4.点击流数据5.股票基金报价6.体育实况更新7.多媒体聊天8.基于位置的应9.在线教育
-聊天室代码见
+聊天室代码见 https://github.com/hcc226/FE-Interview/tree/master/codes/websocket
 ### es6常问知识点
 let 箭头函数 promise 字符串模板 class extend super import export generator async/await
 ### 判断一个网页是从微信打开还是支付宝打开
