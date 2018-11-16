@@ -370,6 +370,12 @@ Sub.prototype = proto;              // 核心
 
 let sub = new Sub();
 ```
+### 图片懒加载（延迟加载）
+
+
+DOM 结构 由一个父容器div#lazy-img，里面是图片标签，父容器是可以滚动的，图片有固定高度。大家可以看到，容器内的img元素没有 src 属性，而有一个 data-src 属性。 这是不想让图片提前加载，所以把图片的链接储存到data-src 内。然后监听scroll事件 替换src
+具体代码详见
+
 
 ### es6常问知识点
 let 箭头函数 promise 字符串模板 class extend super import export generator async/await
