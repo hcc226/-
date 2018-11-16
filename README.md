@@ -543,6 +543,12 @@ userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符�
 
 ### 盒模型
 
+content + padding + border + mragin
+两种和模型：
+- 标准盒模型。指定的高度、宽度为content的高度和宽度
+- IE盒模型。指定的高度、宽度为content+padding+border的高宽
+
+css3中box-sizing属性可以指定盒模型的类型：border-box or content-box or inherit
 
 
 ## 框架（vue/react/angular）<div id="vue"></div>
