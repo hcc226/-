@@ -562,6 +562,17 @@ border-bottom: 100px solid red;
 ```
 效果如图所示
 ![triangle up](/img/triangle_up.png "triangle up")
+```
+#triangle-topleft { 
+width: 0; 
+height: 0; 
+border-top: 100px solid red; 
+border-right: 100px solid transparent; 
+}
+```
+效果如图所示
+![triangle_topleft](/img/triangle_topleft.png "triangle topleft")
+
 
 ## 框架（vue/react/angular）<div id="vue"></div>
 ## 网络、安全方向<div id="net"></div>
