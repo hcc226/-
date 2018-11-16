@@ -573,6 +573,34 @@ border-right: 100px solid transparent;
 效果如图所示
 ![triangle_topleft](/img/triangle_topleft.png "triangle topleft")
 
+### css选择器
+1. 通配符 *{}
+    1. 元素选择器 div p
+    1. class选择器 .class
+    1. id选择器 #id 在页面只能出现一次
+    1. 后代选择器.div .ul .li
+    1. 多元素选择器 div, #box
+    1. 子元素选择器（只是直接子代）ul>li
+    1. 相邻兄弟选择器 div+.box金姐在div后面的同级元素.box
+1. 属性选择器
+    1. div[title] 具有title属性的div元素
+    1. div[arr=val]属性值为val
+    1. div[attr~=val]属性包含val这个词
+    1. .div[attr|=val] 属性值以val开头
+1. 伪类选择器 LVHA
+    1. :link
+    1. :hover
+    1. :active
+    1. :visited
+    1. p:first-child 父元素第一个子元素是p的所有p元素
+    1. nth-child(n)/only-child（必须为父级元素的唯一一个子元素）
+    1. p:first-of-type父元素下的第一个p元素
+    1. last-of-type/only-of-type(父元素下面只有一个p元素，其他不能是p)/nth-of-type(n)
+1. 伪元素选择器
+    1. ::before
+    1. ::after
+!important > 行内样式 （1000） >ID选择器（100） > 类选择器=伪类选择器（10） > 标签=伪元素（1） > 通配符 > 继承 > 浏览器默认属性 
+
 
 ## 框架（vue/react/angular）<div id="vue"></div>
 ## 网络、安全方向<div id="net"></div>
