@@ -550,6 +550,18 @@ content + padding + border + mragin
 
 css3中box-sizing属性可以指定盒模型的类型：border-box or content-box or inherit
 
+### css画三角形
+```
+#triangle-up { 
+width: 0; 
+height: 0; 
+border-left: 50px solid transparent; 
+border-right: 50px solid transparent; 
+border-bottom: 100px solid red; 
+}
+```
+效果如图所示
+![triangle up](/img/triangle_up.png "triangle up")
 
 ## 框架（vue/react/angular）<div id="vue"></div>
 ## 网络、安全方向<div id="net"></div>
