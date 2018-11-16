@@ -372,11 +372,19 @@ let sub = new Sub();
 ```
 ### 图片懒加载（延迟加载）
 
-
 DOM 结构 由一个父容器div#lazy-img，里面是图片标签，父容器是可以滚动的，图片有固定高度。大家可以看到，容器内的img元素没有 src 属性，而有一个 data-src 属性。 这是不想让图片提前加载，所以把图片的链接储存到data-src 内。然后监听scroll事件 替换src
 具体代码详见 https://github.com/hcc226/FE-Interview/blob/master/codes/lazyLoad.js
 
-
+### websocket
+#### 简介
+他解决了HTTP的这几个难题。
+- 首先，被动性，当服务器完成协议升级后（HTTP->Websocket），服务端就可以主动推送信息给客户端。
+在传统的方式上，要不断的建立，关闭HTTP协议，由于HTTP是非状态性的，每次都要重新传输identity info（鉴别信息），来告诉服务端你是谁，会在网路传输中消耗过多的流量/时间。
+但是Websocket只需要一次HTTP握手，所以说整个通讯过程是建立在一次连接/状态中，也就避免了HTTP的非状态性，服务端会一直知道你的信息，直到你关闭请求，这样就解决了要反复解析HTTP协议，还要查看identity info的信息。
+- 同时由客户主动询问，转换为服务器（推送）有信息的时候就发送（当然客户端还是等主动发送信息过来的。。），没有信息的时候就交给接线员（Nginx），不需要占用本身速度就慢的客服（Handler）了 
+#### 主要应用场景
+1.社交订阅2.多玩家游戏3.协同编辑/编程4.点击流数据5.股票基金报价6.体育实况更新7.多媒体聊天8.基于位置的应9.在线教育
+聊天室代码见
 ### es6常问知识点
 let 箭头函数 promise 字符串模板 class extend super import export generator async/await
 ### 判断一个网页是从微信打开还是支付宝打开
