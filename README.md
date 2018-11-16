@@ -370,6 +370,9 @@ Sub.prototype = proto;              // 核心
 
 let sub = new Sub();
 ```
+
+### es6常问知识点
+let 箭头函数 promise 字符串模板 class extend super import export generator async/await
 ### 判断一个网页是从微信打开还是支付宝打开
 userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符串
 
@@ -377,6 +380,171 @@ userAgent 判断window.navigator.userAgent是否包含alipay/micromessage字符�
 答：a instanceof Array  Array.isArray(a) 还有 Object.prototype.toString.call() === '[object Array]'
 
 ## css基础知识<div id="css"></div>
+
+### 关于浮动
+#### 浮动的影响
+- 父元素的高度无法被撑开，影响与父元素同级的元素
+- 与浮动元素同级的非浮动元素会跟随其后
+- 若非第一个元素浮动，则该元素之前的元素也需要浮动，否则会影响页面显示的结构
+
+当容器的高度为auto，且容器的内容中有浮动（float为left或right）的元素，在这种情况下，容器的高度不能自动伸长以适应内容的高度，使得内容溢出到容器外面而影响（甚至破坏）布局的现象。这个现象叫浮动溢出，为了防止这个现象的出现而进行的CSS处理，就叫CSS清除浮动。
+浮动虽然可以便于页面布局，但同时会产生一些问题，也就是我们常说的“副作用”。而一个元素设置了浮动（即 float 值为 left, right 或 inherit 并从父元素上继承 left 或 right 值）的常见缺陷是——影响它的兄弟元素的位置和父元素产生高度塌陷，下面对这两个问题展开说明。
+- 一个元素设置了浮动后，会影响它的兄弟元素，具体的影响方式较为复杂，这要视乎这些兄弟元素是块级元素还是内联元素，若是块级元素会无视这个浮动的块框，也就是我们平时看到的效果——使到自身尽可能与这个浮动元素处于同一行，导致被浮动元素覆盖，除非这些 div 设置了宽度，并且父元素的宽度不足以包含它们，这样兄弟元素才会被强制换行；若是内联元素，则会尽可能围绕浮动元素。
+- 另外，浮动的元素脱离了普通流，这样使得包含它的父元素并不会因为这个浮动元素的存在而自动撑高，这样就会造成高度塌陷。
+
+#### 清除浮动的方法
+- 父级div定义伪类：after和zoom
+```
+<style type="text/css"> 
+   .div1{background:#000080;border:1px solid red;}
+   .div2{background:#800080;border:1px solid red;height:100px;margin-top:10px}
+   
+   .left{float:left;width:20%;height:200px;background:#DDD}
+   .right{float:right;width:30%;height:80px;background:#DDD}
+   
+   /*清除浮动代码*/
+   .clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+   .clearfloat{zoom:1}
+   </style> 
+<div class="div1 clearfloat"> 
+<div class="left">Left</div> 
+<div class="right">Right</div> 
+</div>
+<div class="div2">
+   div2
+   </div>
+```
++ 原理：IE8以上和非IE浏览器才支持:after，原理和方法2有点类似，zoom(IE转有属性)可解决ie6,ie7浮动问题
++ 优点：浏览器支持好，不容易出现怪问题（目前：大型网站都有使用，如：腾迅，网易，新浪等等）
++ 缺点：代码多，不少初学者不理解原理，要两句代码结合使用，才能让主流浏览器都支持
++ 建议：推荐使用，建议定义公共类，以减少CSS代码
++ 评分：★★★★☆
+
+- 在结尾处添加空div标签clear:both
+```
+<style type="text/css"> 
+   .div1{background:#000080;border:1px solid red}
+   .div2{background:#800080;border:1px solid red;height:100px;margin-top:10px}
+   
+   .left{float:left;width:20%;height:200px;background:#DDD}
+   .right{float:right;width:30%;height:80px;background:#DDD}
+   
+   /*清除浮动代码*/
+   .clearfloat{clear:both}
+   </style> 
+<div class="div1"> 
+<div class="left">Left</div> 
+<div class="right">Right</div>
+<div class="clearfloat"></div>
+</div>
+<div class="div2">
+   div2
+   </div>
+```
++ 原理：添加一个空div，利用css提高的clear:both清除浮动，让父级div能自动获取到高度
++ 优点：简单，代码少，浏览器支持好，不容易出现怪问题
++ 缺点：不少初学者不理解原理；如果页面浮动布局多，就要增加很多空div，让人感觉很不爽
++ 建议：不推荐使用，但此方法是以前主要使用的一种清除浮动方法
++ 评分：★★★☆☆
+- 父级div定义overflow:hidden
+```
+<style type="text/css"> 
+   .div1{background:#000080;border:1px solid red;/*解决代码*/width:98%;overflow:hidden}
+   .div2{background:#800080;border:1px solid red;height:100px;margin-top:10px;width:98%}
+   
+   .left{float:left;width:20%;height:200px;background:#DDD}
+   .right{float:right;width:30%;height:80px;background:#DDD}
+   </style> 
+<div class="div1"> 
+<div class="left">Left</div> 
+<div class="right">Right</div>
+</div>
+<div class="div2">
+   div2
+   </div>
+```
++ 原理：必须定义width或zoom:1，同时不能定义height，使用overflow:hidden时，浏览器会自动检查浮动区域的高度
++ 优点：简单，代码少，浏览器支持好
++ 缺点：不能和position配合使用，因为超出的尺寸的会被隐藏
++ 建议：只推荐没有使用position或对overflow:hidden理解比较深的朋友使用
++ 评分：★★★☆☆ 
+
+### 垂直水平居中 的几种解决方案
+ 
+#### 方案1 元素已知宽度 
+父元素设置为：position: relative; 
+子元素设置为：position: absolute; 
+距上50%，据左50%，然后减去元素自身宽度的距离就可以实现 
+```
+<div class="box">
+    <div class="content">
+    </div>
+</div>
+.box {
+    background-color: #FF8C00;
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+.content {
+    background-color: #F00;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -50px 0 0 -50px;
+}
+```
+#### 方案2：元素未知宽度 
+如果元素未知宽度，只需将上面例子中的margin: -50px 0 0 -50px;替换为：transform: translate(-50%,-50%); 
+```
+<div class="box">
+    <div class="content">
+    </div>
+</div>
+.box {
+    background-color: #FF8C00;
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+.content {
+    background-color: #F00;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+```
+#### flex布局 
+```
+<div class="box">
+    <div class="content">
+    </div>
+</div>
+
+.box {
+    background-color: #FF8C00;
+    width: 300px;
+    height: 300px;
+    display: flex;//flex布局
+    justify-content: center;//使子项目水平居中
+    align-items: center;//使子项目垂直居中
+}
+.content {
+ background-color: #F00;
+    width: 100px;
+    height: 100px;
+}
+```
+
+### 盒模型
+
+
+
 ## 框架（vue/react/angular）<div id="vue"></div>
 ## 网络、安全方向<div id="net"></div>
 ### https介绍
